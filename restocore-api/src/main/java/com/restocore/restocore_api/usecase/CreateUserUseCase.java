@@ -4,34 +4,42 @@ import com.restocore.restocore_api.dtos.CreateUserRequestDTO;
 import com.restocore.restocore_api.dtos.CreateUserResponseDTO;
 import com.restocore.restocore_api.mapper.UserMapper;
 import com.restocore.restocore_api.repository.UserRepository;
+import com.restocore.restocore_api.shared.TextNormalizer;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Component;
+
+import java.util.Locale;
 
 @Component
 public class CreateUserUseCase {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private final TextNormalizer textNormalizer;
 
-    public CreateUserUseCase(UserRepository userRepository, UserMapper userMapper) {
+    public CreateUserUseCase(UserRepository userRepository, UserMapper userMapper, TextNormalizer textNormalizer) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
+        this.textNormalizer = textNormalizer;
     }
 
     @Transactional
     public CreateUserResponseDTO execute(CreateUserRequestDTO request) {
-        userRepository.findByEmail(request.email())
-                .ifPresent(user -> {
-                    throw new RuntimeException("Email already registered");
-                });
+        String normalizedEmail = textNormalizer.normalizeToLowerTrim(request.email());
+        String normalizedLogin = textNormalizer.normalizeToLowerTrim(request.login());
 
-        userRepository.findByLogin(request.login())
-                .ifPresent(u -> {
-                    throw new RuntimeException("Login already registered");
-                });
+        if (userRepository.existsByEmail(normalizedEmail)) {
+            throw new RuntimeException("Email already registered");
+        }
+
+        if (userRepository.existsByLogin(normalizedLogin)) {
+            throw new RuntimeException("Login already registered");
+        }
 
         var userEntity = userMapper.toEntity(request);
         var savedUser = userRepository.save(userEntity);
         return userMapper.toResponse(savedUser);
     }
+
+
 }

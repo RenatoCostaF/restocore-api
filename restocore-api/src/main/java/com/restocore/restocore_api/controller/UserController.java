@@ -2,7 +2,7 @@ package com.restocore.restocore_api.controller;
 
 import com.restocore.restocore_api.dtos.CreateUserRequestDTO;
 import com.restocore.restocore_api.dtos.CreateUserResponseDTO;
-import com.restocore.restocore_api.entity.User;
+import com.restocore.restocore_api.dtos.GetAllUserResponseDTO;
 import com.restocore.restocore_api.usecase.CreateUserUseCase;
 import com.restocore.restocore_api.usecase.GetAllUserUseCase;
 import jakarta.validation.Valid;
@@ -32,7 +32,7 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<List<User>> getAll() {
+    public ResponseEntity<List<GetAllUserResponseDTO>> getAll() {
         return ResponseEntity.status(HttpStatus.OK.value()).body(getAllUserUseCase.execute());
     }
 }
