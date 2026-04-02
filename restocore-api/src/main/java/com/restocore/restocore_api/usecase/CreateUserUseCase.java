@@ -8,8 +8,6 @@ import com.restocore.restocore_api.shared.TextNormalizer;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Component;
 
-import java.util.Locale;
-
 @Component
 public class CreateUserUseCase {
 
@@ -38,8 +36,7 @@ public class CreateUserUseCase {
 
         var userEntity = userMapper.toEntity(request);
         var savedUser = userRepository.save(userEntity);
-        return userMapper.toResponse(savedUser);
+        return userMapper.toCreateResponse(savedUser);
     }
-
 
 }
