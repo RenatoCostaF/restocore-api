@@ -2,23 +2,26 @@ package com.restocore.restocore_api.controller;
 
 import com.restocore.restocore_api.dtos.CreateUserRequestDTO;
 import com.restocore.restocore_api.dtos.CreateUserResponseDTO;
+import com.restocore.restocore_api.entity.User;
 import com.restocore.restocore_api.usecase.CreateUserUseCase;
+import com.restocore.restocore_api.usecase.GetAllUserUseCase;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("v1/user")
 public class UserController {
 
     private final CreateUserUseCase createUserUseCase;
+    private final GetAllUserUseCase getAllUserUseCase;
 
-    public UserController(CreateUserUseCase createUserUseCase) {
+    public UserController(CreateUserUseCase createUserUseCase, GetAllUserUseCase getAllUserUseCase) {
         this.createUserUseCase = createUserUseCase;
+        this.getAllUserUseCase = getAllUserUseCase;
     }
 
     @PostMapping
@@ -26,5 +29,10 @@ public class UserController {
             @Valid @RequestBody CreateUserRequestDTO request
     ) {
         return ResponseEntity.status(HttpStatus.CREATED.value()).body(createUserUseCase.execute(request));
+    }
+
+    @GetMapping
+    public ResponseEntity<List<User>> getAll() {
+        return ResponseEntity.status(HttpStatus.OK.value()).body(getAllUserUseCase.execute());
     }
 }
