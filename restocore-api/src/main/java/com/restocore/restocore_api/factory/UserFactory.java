@@ -24,7 +24,7 @@ public class UserFactory {
             Address address
     ) {
         User user = new User();
-        user.setName(name);
+        user.setName(textNormalizer.normalizeToLower(name));
         user.setEmail(textNormalizer.normalizeToLowerTrim(email));
         user.setLogin(textNormalizer.normalizeToLowerTrim(login));
         user.setPassword(password);

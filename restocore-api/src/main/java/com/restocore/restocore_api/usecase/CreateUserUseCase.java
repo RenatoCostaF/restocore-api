@@ -2,6 +2,8 @@ package com.restocore.restocore_api.usecase;
 
 import com.restocore.restocore_api.dtos.CreateUserRequestDTO;
 import com.restocore.restocore_api.dtos.CreateUserResponseDTO;
+import com.restocore.restocore_api.exception.EmailAlreadyRegisteredException;
+import com.restocore.restocore_api.exception.LoginAlreadyRegisteredException;
 import com.restocore.restocore_api.mapper.UserMapper;
 import com.restocore.restocore_api.repository.UserRepository;
 import com.restocore.restocore_api.shared.TextNormalizer;
@@ -27,16 +29,16 @@ public class CreateUserUseCase {
         String normalizedLogin = textNormalizer.normalizeToLowerTrim(request.login());
 
         if (userRepository.existsByEmail(normalizedEmail)) {
-            throw new RuntimeException("Email already registered");
+            throw new EmailAlreadyRegisteredException();
         }
 
         if (userRepository.existsByLogin(normalizedLogin)) {
-            throw new RuntimeException("Login already registered");
+            throw new LoginAlreadyRegisteredException();
         }
 
         var userEntity = userMapper.toEntity(request);
         var savedUser = userRepository.save(userEntity);
-        return userMapper.toCreateResponse(savedUser);
+        return userMapper.toCreateUserResponseDTO(savedUser);
     }
 
 }

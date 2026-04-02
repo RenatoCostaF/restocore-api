@@ -36,7 +36,7 @@ public class UserMapper {
         );
     }
 
-    public CreateUserResponseDTO toCreateResponse(User user) {
+    public CreateUserResponseDTO toCreateUserResponseDTO(User user) {
         return new CreateUserResponseDTO(
                 user.getId(),
                 user.getName(),
@@ -45,7 +45,7 @@ public class UserMapper {
         );
     }
 
-    public List<GetAllUserResponseDTO> toGetAllResponseList(List<User> users) {
+    public List<GetAllUserResponseDTO> toGetAllUserResponseDTO(List<User> users) {
         return users.stream()
                 .map(user -> new GetAllUserResponseDTO(
                         user.getId(),

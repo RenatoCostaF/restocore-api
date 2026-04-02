@@ -20,6 +20,6 @@ public class GetAllUserUseCase {
 
     public List<GetAllUserResponseDTO> execute() {
         var users = userRepository.findAll();
-        return userMapper.toGetAllResponseList(users);
+        return userMapper.toGetAllUserResponseDTO(users);
     }
 }

@@ -10,4 +10,8 @@ public class TextNormalizer {
     public String normalizeToLowerTrim(String value) {
         return value == null ? null : value.trim().toLowerCase(Locale.ROOT);
     }
+
+    public String normalizeToLower(String value) {
+        return value == null ? null : value.toLowerCase(Locale.ROOT);
+    }
 }
