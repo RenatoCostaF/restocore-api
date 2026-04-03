@@ -6,16 +6,18 @@ import com.restocore.restocore_api.dtos.GetAllUserResponseDTO;
 import com.restocore.restocore_api.entity.Address;
 import com.restocore.restocore_api.entity.User;
 import com.restocore.restocore_api.factory.UserFactory;
-import org.springframework.stereotype.Component;
+import org.mapstruct.Mapper;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
-@Component
-public class UserMapper {
+@Mapper(componentModel = "spring")
+public abstract class UserMapper {
 
-    private final UserFactory userFactory;
+    private UserFactory userFactory;
 
-    public UserMapper(UserFactory userFactory) {
+    @Autowired
+    public void setUserFactory(UserFactory userFactory) {
         this.userFactory = userFactory;
     }
 
@@ -36,23 +38,9 @@ public class UserMapper {
         );
     }
 
-    public CreateUserResponseDTO toCreateUserResponseDTO(User user) {
-        return new CreateUserResponseDTO(
-                user.getId(),
-                user.getName(),
-                user.getEmail(),
-                user.getUserType()
-        );
-    }
+    public abstract CreateUserResponseDTO toCreateUserResponseDTO(User user);
 
-    public List<GetAllUserResponseDTO> toGetAllUserResponseDTO(List<User> users) {
-        return users.stream()
-                .map(user -> new GetAllUserResponseDTO(
-                        user.getId(),
-                        user.getName(),
-                        user.getEmail(),
-                        user.getUserType()
-                ))
-                .toList();
-    }
+    public abstract GetAllUserResponseDTO toGetAllUserResponseDTO(User user);
+
+    public abstract List<GetAllUserResponseDTO> toGetAllUserResponseDTO(List<User> users);
 }
